@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart APE - brilliant ape take notes</title>
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation Header -->
+        <nav class="top-nav">
+            <div class="nav-content">
+                <div class="nav-left">
+                    <div class="logo">
+                        <img src="../images/logo.png" alt="Smart APE Logo" class="logo-icon">
+                        <span class="logo-text">Smart APE</span>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <button class="nav-button active" id="balanceBtn">
+                        📊 Balance
+                    </button>
+                    <button class="nav-button" id="categoriesBtn">
+                        🏷️ Categorías
+                    </button>
+                    <button class="nav-button" id="reportsBtn">
+                        📈 Reportes
+                    </button>
+                    <button id="logoutBtn" class="logout-btn">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Balance Section -->
+            <section class="balance-section">
+                <div class="balance-card">
+                    <h2>Balance</h2>
+                    <div class="balance-items">
+                        <div class="balance-item positive">
+                            <span class="balance-label">Ganancias</span>
+                            <span class="balance-amount" id="ganancias">+$0</span>
+                        </div>
+                        <div class="balance-item negative">
+                            <span class="balance-label">Gastos</span>
+                            <span class="balance-amount" id="gastos">-$0</span>
+                        </div>
+                        <div class="balance-item total">
+                            <span class="balance-label">Total</span>
+                            <span class="balance-amount" id="totalBalance">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters Section -->
+                <div class="filters-card">
+                    <div class="filters-header">
+                        <h3>Filtros</h3>
+                        <button class="hide-filters-btn" id="hideFiltersBtn">Ocultar filtros</button>
+                    </div>
+                    <div class="filters-content">
+                        <div class="filter-group">
+                            <label for="typeFilter">Tipo</label>
+                            <select id="typeFilter" class="filter-select">
+                                <option value="todos">Todos</option>
+                                <option value="ganancias">Ganancias</option>
+                                <option value="gastos">Gastos</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="categoryFilter">Categoría</label>
+                            <select id="categoryFilter" class="filter-select">
+                                <option value="todas">Todas</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="dateFilter">Desde</label>
+                            <input type="date" id="dateFilter" class="filter-input" value="2025-07-29">
+                        </div>
+                        <div class="filter-group">
+                            <label for="orderFilter">Ordenar por</label>
+                            <select id="orderFilter" class="filter-select">
+                                <option value="recent">Más reciente</option>
+                                <option value="oldest">Más antiguo</option>
+                                <option value="highest">Mayor monto</option>
+                                <option value="lowest">Menor monto</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Operations Section -->
+            <section class="operations-section">
+                <div class="operations-header">
+                    <h2>Operaciones</h2>
+                    <button class="new-operation-btn" id="newOperationBtn">+ Nueva operación</button>
+                </div>
+                
+                <div class="operations-content">
+                    <div class="empty-state" id="emptyState">
+                        <div class="empty-illustration">
+                            <div class="illustration-container">
+                                <div class="wallet-icon">💼</div>
+                                <div class="people-icons">
+                                    <span class="person-icon">👤</span>
+                                    <span class="person-icon">👤</span>
+                                </div>
+                                <div class="money-icon">💰</div>
+                            </div>
+                        </div>
+                        <h3>Sin resultados</h3>
+                        <p>Cambia los filtros o agrega operaciones</p>
+                    </div>
+                    
+                    <div class="operations-list" id="operationsList" style="display: none;">
+                        <!-- Operations will be loaded here dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories Section -->
+            <section class="categories-section" id="categoriesSection" style="display: none;">
+                <div class="categories-simple-container">
+                    <h2>Categorías</h2>
+                    
+                    <div class="categories-content-horizontal">
+                        <!-- Add Category Form Section -->
+                        <div class="categories-form-section">
+                            <div class="add-category-simple">
+                                <div class="add-category-row">
+                                    <label>Nombre</label>
+                                    <div class="input-button-group">
+                                        <input type="text" id="simpleCategoryName" placeholder="Ingresa una categoría" onkeypress="if(event.key==='Enter') categoriesManager.addSimpleCategory()">
+                                        <button type="button" class="btn-add-simple" onclick="categoriesManager.addSimpleCategory()">Agregar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Categories List Section -->
+                        <div class="categories-list-section">
+                            <h3 style="color: #4a4a00; margin-bottom: 1rem; font-size: 1.5rem; font-weight: 600;">Mis Categorías</h3>
+                            <div class="simple-categories-list" id="simpleCategoriesList">
+                                <!-- Categories will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section class="reports-section" id="reportsSection" style="display: none;">
+                <div class="reports-container">
+                    <h2>Reportes</h2>
+                    
+                    <div class="reports-content-horizontal">
+                        <!-- Summary Section -->
+                        <div class="reports-summary-section">
+                            <div class="reports-summary">
+                                <h3>Resumen</h3>
+                                
+                                <div class="summary-item">
+                                    <span class="summary-label">Categoría con mayor ganancia</span>
+                                    <span class="summary-category" id="topGainCategory">-</span>
+                                    <span class="summary-value positive" id="topGainValue">+$0</span>
+                                </div>
+                                
+                                <div class="summary-item">
+                                    <span class="summary-label">Categoría con mayor gasto</span>
+                                    <span class="summary-category" id="topExpenseCategory">-</span>
+                                    <span class="summary-value negative" id="topExpenseValue">-$0</span>
+                                </div>
+                                
+                                <div class="summary-item">
+                                    <span class="summary-label">Categoría con mayor balance</span>
+                                    <span class="summary-category" id="topBalanceCategory">-</span>
+                                    <span class="summary-value" id="topBalanceValue">$0</span>
+                                </div>
+                                
+                                <div class="summary-item">
+                                    <span class="summary-label">Mes con mayor ganancia</span>
+                                    <span class="summary-category" id="topGainMonth">-</span>
+                                    <span class="summary-value positive" id="topGainMonthValue">$0</span>
+                                </div>
+                                
+                                <div class="summary-item">
+                                    <span class="summary-label">Mes con mayor gasto</span>
+                                    <span class="summary-category" id="topExpenseMonth">-</span>
+                                    <span class="summary-value negative" id="topExpenseMonthValue">-$0</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Categories Totals Table Section -->
+                        <div class="reports-table-section">
+                            <div class="reports-table">
+                                <h3>Totales por categorías</h3>
+                                
+                                <table class="categories-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Categoría</th>
+                                            <th>Ganancias</th>
+                                            <th>Gastos</th>
+                                            <th>Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="categoriesTableBody">
+                                        <!-- Data will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- New Operation Modal -->
+        <div id="operationModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Nueva operación</h3>
+                    <button class="modal-close" id="closeModal">&times;</button>
+                </div>
+                <form id="operationForm" class="operation-form">
+                    <div class="form-group">
+                        <label for="operationDescription">Descripción</label>
+                        <input type="text" id="operationDescription" name="description" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="operationAmount">Monto</label>
+                        <input type="number" id="operationAmount" name="amount" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="operationType">Tipo</label>
+                        <select id="operationType" name="type" required>
+                            <option value="ganancias">Ganancia</option>
+                            <option value="gastos">Gasto</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="operationCategory">Categoría</label>
+                        <select id="operationCategory" name="category" required>
+                            <!-- Categories will be loaded dynamically -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="operationDate">Fecha</label>
+                        <input type="date" id="operationDate" name="date" required>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="button" id="cancelBtn" class="btn-secondary">Cancelar</button>
+                        <button type="submit" id="submitBtn" class="btn-primary">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Categories Management Modal -->
+        <div id="categoriesModal" class="modal" style="display: none;">
+            <div class="modal-content categories-modal">
+                <div class="modal-header">
+                    <h3>Gestionar Categorías</h3>
+                    <button class="modal-close" onclick="categoriesManager.hideCategoriesModal()">&times;</button>
+                </div>
+                
+                <div class="categories-content">
+                    <!-- Add Category Button -->
+                    <div class="categories-header">
+                        <button class="btn-primary" onclick="categoriesManager.showAddCategoryForm()">+ Nueva Categoría</button>
+                    </div>
+                    
+                    <!-- Add/Edit Category Form -->
+                    <form id="addCategoryForm" class="category-form" style="display: none;" onsubmit="categoriesManager.handleCategorySubmit(event)">
+                        <h4 id="categoryFormTitle">Nueva Categoría</h4>
+                        
+                        <div class="form-group">
+                            <label for="categoryName">Nombre</label>
+                            <input type="text" id="categoryName" name="name" required maxlength="20" placeholder="Ej: Compras, Viajes">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="categoryIcon">Emoji/Ícono</label>
+                            <input type="text" id="categoryIcon" name="icon" maxlength="2" placeholder="📁" title="Escoge un emoji para representar la categoría">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="categoryColor">Color</label>
+                            <input type="color" id="categoryColor" name="color" value="#4fd1c7">
+                        </div>
+                        
+                        <div class="form-buttons">
+                            <button type="button" onclick="categoriesManager.hideAddCategoryForm()" class="btn-secondary">Cancelar</button>
+                            <button type="submit" class="btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                    
+                    <!-- Categories List -->
+                    <div class="categories-list">
+                        <h4>Mis Categorías</h4>
+                        <div id="categoriesListContainer" class="categories-list-container">
+                            <!-- Categories will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load utilities and modules -->
+    <script src="../js/config/api.js"></script>
+    <script src="../js/utils/dom.js"></script>
+    <script src="../js/utils/validation.js"></script>
+    <script src="../js/utils/messages.js"></script>
+    <script src="../js/utils/navigation.js"></script>
+    <script src="../js/utils/session.js"></script>
+    <script src="../js/financial/operationsManager.js"></script>
+    <script src="../js/financial/categoriesManager.js"></script>
+    
+    <script>
+        // Initialize managers
+        const operationsManager = new OperationsManager();
+        const categoriesManager = new CategoriesManager(operationsManager);
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Initializing Smart APE Financial System...');
+            
+            // Check if user is logged in
+            if (!SessionUtils.isLoggedIn()) {
+                console.log('User not logged in, redirecting...');
+                NavigationUtils.redirectTo('redirect.html');
+                return;
+            }
+            
+            // Get current user
+            const currentUser = SessionUtils.getCurrentUser();
+            if (!currentUser) {
+                console.log('No user data found, redirecting...');
+                NavigationUtils.redirectTo('redirect.html');
+                return;
+            }
+            
+            // Initialize operations manager with current user
+            operationsManager.init(currentUser);
+            
+            // Initialize categories manager with current user
+            categoriesManager.init(currentUser);
+            
+            // Connect the managers
+            categoriesManager.setOperationsManager(operationsManager);
+            
+            // Initialize the financial app
+            initializeFinancialApp();
+            
+            console.log('Application initialized successfully for user:', currentUser.email);
+        });
+
+        function initializeFinancialApp() {
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Update category selects with user's categories
+            categoriesManager.updateCategorySelects();
+            
+            // Render initial operations
+            renderOperations();
+            
+            // Set default date to today
+            document.getElementById('operationDate').value = new Date().toISOString().split('T')[0];
+        }
+
+        function setupEventListeners() {
+            // Navigation buttons
+            document.getElementById('balanceBtn').addEventListener('click', () => showSection('balance'));
+            document.getElementById('categoriesBtn').addEventListener('click', () => showSection('categories'));
+            document.getElementById('reportsBtn').addEventListener('click', () => showSection('reports'));
+            
+            // New operation button
+            document.getElementById('newOperationBtn').addEventListener('click', () => {
+                document.getElementById('operationModal').style.display = 'flex';
+            });
+            
+            // Modal close buttons
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('cancelBtn').addEventListener('click', closeModal);
+            
+            // Form submission
+            document.getElementById('operationForm').addEventListener('submit', handleOperationSubmit);
+            
+            // Filters
+            document.getElementById('typeFilter').addEventListener('change', applyFilters);
+            document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+            document.getElementById('dateFilter').addEventListener('change', applyFilters);
+            document.getElementById('orderFilter').addEventListener('change', applyFilters);
+            
+            // Hide filters button
+            document.getElementById('hideFiltersBtn').addEventListener('click', toggleFilters);
+            
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                if (confirm('¿Estás seguro que quieres cerrar sesión?')) {
+                    SessionUtils.logout();
+                    NavigationUtils.redirectTo('redirect.html');
+                }
+            });
+        }
+
+        function showSection(section) {
+            // Update nav buttons
+            document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(section + 'Btn').classList.add('active');
+            
+            // Hide all sections
+            document.querySelector('.balance-section').style.display = 'none';
+            document.querySelector('.operations-section').style.display = 'none';
+            const categoriesSection = document.getElementById('categoriesSection');
+            const reportsSection = document.getElementById('reportsSection');
+            if (categoriesSection) categoriesSection.style.display = 'none';
+            if (reportsSection) reportsSection.style.display = 'none';
+            
+            // Show the selected section
+            switch(section) {
+                case 'balance':
+                    document.querySelector('.balance-section').style.display = 'block';
+                    document.querySelector('.operations-section').style.display = 'block';
+                    break;
+                case 'categories':
+                    if (categoriesSection) {
+                        categoriesSection.style.display = 'block';
+                        // Render categories when section is shown
+                        categoriesManager.renderSimpleCategoriesList();
+                    }
+                    break;
+                case 'reports':
+                    if (reportsSection) {
+                        reportsSection.style.display = 'block';
+                        // Generate reports when section is shown
+                        generateReports();
+                    }
+                    break;
+            }
+            
+            console.log('Showing section:', section);
+        }
+
+        function renderOperations() {
+            const operationsList = document.getElementById('operationsList');
+            const emptyState = document.getElementById('emptyState');
+            const operations = operationsManager.getAllOperations();
+            
+            if (operations.length === 0) {
+                operationsList.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            operationsList.style.display = 'block';
+            emptyState.style.display = 'none';
+            
+            operationsList.innerHTML = operations.map(operation => `
+                <div class="operation-item">
+                    <div class="operation-info">
+                        <div class="operation-description">${operation.description}</div>
+                        <div class="operation-meta">
+                            <span class="operation-category">${operation.category}</span>
+                            <span class="operation-date">${operationsManager.formatDate(operation.date)}</span>
+                        </div>
+                    </div>
+                    <div class="operation-amount ${operation.type}">
+                        ${operation.type === 'ganancias' ? '+' : '-'}$${operation.amount}
+                    </div>
+                    <div class="operation-actions">
+                        
+                        <button class="btn-delete" onclick="deleteOperation(${operation.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handleOperationSubmit(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const operationData = {
+                description: formData.get('description'),
+                amount: formData.get('amount'),
+                type: formData.get('type'),
+                category: formData.get('category'),
+                date: formData.get('date')
+            };
+            
+            operationsManager.addOperation(operationData);
+            renderOperations();
+            closeModal();
+            
+            // Reset form
+            e.target.reset();
+            document.getElementById('operationDate').value = new Date().toISOString().split('T')[0];
+        }
+
+        function closeModal() {
+            document.getElementById('operationModal').style.display = 'none';
+        }
+
+        function deleteOperation(id) {
+            if (confirm('¿Estás seguro que quieres eliminar esta operación?')) {
+                operationsManager.deleteOperation(id);
+                renderOperations();
+            }
+        }
+
+        function editOperation(id) {
+            // Implementation for editing operations
+            console.log('Edit operation:', id);
+        }
+
+        function applyFilters() {
+            // Implementation for filtering operations
+            console.log('Applying filters...');
+            renderOperations();
+        }
+
+        function toggleFilters() {
+            const filtersContent = document.querySelector('.filters-content');
+            const btn = document.getElementById('hideFiltersBtn');
+            
+            if (filtersContent.style.display === 'none') {
+                filtersContent.style.display = 'block';
+                btn.textContent = 'Ocultar filtros';
+            } else {
+                filtersContent.style.display = 'none';
+                btn.textContent = 'Mostrar filtros';
+            }
+        }
+
+        function generateReports() {
+            const operations = operationsManager.getAllOperations();
+            
+            if (operations.length === 0) {
+                // Show empty state if no operations
+                document.getElementById('categoriesTableBody').innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem;">No hay operaciones para mostrar</td></tr>';
+                return;
+            }
+
+            // Calculate category totals
+            const categoryTotals = {};
+            operations.forEach(op => {
+                if (!categoryTotals[op.category]) {
+                    categoryTotals[op.category] = { gains: 0, expenses: 0, balance: 0 };
+                }
+                
+                const amount = parseFloat(op.amount);
+                if (op.type === 'ganancias') {
+                    categoryTotals[op.category].gains += amount;
+                } else {
+                    categoryTotals[op.category].expenses += amount;
+                }
+                categoryTotals[op.category].balance = categoryTotals[op.category].gains - categoryTotals[op.category].expenses;
+            });
+
+            // Find top categories
+            let topGainCategory = null;
+            let topExpenseCategory = null;
+            let topBalanceCategory = null;
+            let maxGains = 0;
+            let maxExpenses = 0;
+            let maxBalance = -Infinity;
+
+            Object.entries(categoryTotals).forEach(([category, totals]) => {
+                if (totals.gains > maxGains) {
+                    maxGains = totals.gains;
+                    topGainCategory = { name: category, value: totals.gains };
+                }
+                if (totals.expenses > maxExpenses) {
+                    maxExpenses = totals.expenses;
+                    topExpenseCategory = { name: category, value: totals.expenses };
+                }
+                if (totals.balance > maxBalance) {
+                    maxBalance = totals.balance;
+                    topBalanceCategory = { name: category, value: totals.balance };
+                }
+            });
+
+            // Calculate monthly totals
+            const monthlyTotals = {};
+            operations.forEach(op => {
+                const date = new Date(op.date);
+                const monthKey = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}`;
+                
+                if (!monthlyTotals[monthKey]) {
+                    monthlyTotals[monthKey] = { gains: 0, expenses: 0 };
+                }
+                
+                const amount = parseFloat(op.amount);
+                if (op.type === 'ganancias') {
+                    monthlyTotals[monthKey].gains += amount;
+                } else {
+                    monthlyTotals[monthKey].expenses += amount;
+                }
+            });
+
+            // Find top months
+            let topGainMonth = null;
+            let topExpenseMonth = null;
+            let maxMonthlyGains = 0;
+            let maxMonthlyExpenses = 0;
+
+            Object.entries(monthlyTotals).forEach(([month, totals]) => {
+                if (totals.gains > maxMonthlyGains) {
+                    maxMonthlyGains = totals.gains;
+                    topGainMonth = { name: month, value: totals.gains };
+                }
+                if (totals.expenses > maxMonthlyExpenses) {
+                    maxMonthlyExpenses = totals.expenses;
+                    topExpenseMonth = { name: month, value: totals.expenses };
+                }
+            });
+
+            // Update summary section
+            if (topGainCategory) {
+                document.getElementById('topGainCategory').textContent = topGainCategory.name.charAt(0).toUpperCase() + topGainCategory.name.slice(1);
+                document.getElementById('topGainValue').textContent = `+$${topGainCategory.value.toFixed(2)}`;
+            }
+
+            if (topExpenseCategory) {
+                document.getElementById('topExpenseCategory').textContent = topExpenseCategory.name.charAt(0).toUpperCase() + topExpenseCategory.name.slice(1);
+                document.getElementById('topExpenseValue').textContent = `-$${topExpenseCategory.value.toFixed(2)}`;
+            }
+
+            if (topBalanceCategory) {
+                document.getElementById('topBalanceCategory').textContent = topBalanceCategory.name.charAt(0).toUpperCase() + topBalanceCategory.name.slice(1);
+                document.getElementById('topBalanceValue').textContent = `$${topBalanceCategory.value.toFixed(2)}`;
+                document.getElementById('topBalanceValue').className = `summary-value ${topBalanceCategory.value >= 0 ? 'positive' : 'negative'}`;
+            }
+
+            if (topGainMonth) {
+                document.getElementById('topGainMonth').textContent = topGainMonth.name;
+                document.getElementById('topGainMonthValue').textContent = `$${topGainMonth.value.toFixed(2)}`;
+            }
+
+            if (topExpenseMonth) {
+                document.getElementById('topExpenseMonth').textContent = topExpenseMonth.name;
+                document.getElementById('topExpenseMonthValue').textContent = `-$${topExpenseMonth.value.toFixed(2)}`;
+            }
+
+            // Generate categories table
+            const tableBody = document.getElementById('categoriesTableBody');
+            tableBody.innerHTML = Object.entries(categoryTotals)
+                .sort((a, b) => b[1].balance - a[1].balance)
+                .map(([category, totals]) => `
+                    <tr>
+                        <td>${category.charAt(0).toUpperCase() + category.slice(1)}</td>
+                        <td class="positive">+$${totals.gains.toFixed(2)}</td>
+                        <td class="negative">-$${totals.expenses.toFixed(2)}</td>
+                        <td class="${totals.balance >= 0 ? 'positive' : 'negative'}">$${totals.balance.toFixed(2)}</td>
+                    </tr>
+                `).join('');
+        }
+    </script>
+</body>
+</html>

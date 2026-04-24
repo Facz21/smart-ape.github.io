@@ -1,0 +1,98 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "fullName": "Admin User",
+      "email": "admin@company.com",
+      "password": "admin123",
+      "createdAt": "2025-07-29T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "fullName": "Manager User",
+      "email": "manager@company.com",
+      "password": "manager123",
+      "createdAt": "2025-07-29T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "fullName": "Regular User",
+      "email": "user@company.com",
+      "password": "user123",
+      "createdAt": "2025-07-29T00:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "fullName": "polnaref",
+      "email": "legusci@zeppeli.com",
+      "password": "123456789",
+      "createdAt": "2025-07-28T17:38:58.410Z"
+    },
+    {
+      "id": "5",
+      "fullName": "Test10",
+      "email": "test@new.com",
+      "password": "111111",
+      "createdAt": "2025-07-29T04:40:25.637Z"
+    },
+    {
+      "id": "6",
+      "fullName": "Juset",
+      "email": "juse@new.com",
+      "password": "juse123",
+      "role": "user",
+      "createdAt": "2025-07-29T16:05:28.048Z"
+    }
+  ],
+  "operations": [],
+  "categories": [
+    {
+      "id": "1",
+      "userId": "3",
+      "name": "trabajo",
+      "icon": "💼",
+      "color": "#4fd1c7",
+      "createdAt": "2025-07-29T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "userId": "3",
+      "name": "comida",
+      "icon": "🍽️",
+      "color": "#f56565",
+      "createdAt": "2025-07-29T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "userId": "3",
+      "name": "entretenimiento",
+      "icon": "🎬",
+      "color": "#9f7aea",
+      "createdAt": "2025-07-29T00:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "userId": "3",
+      "name": "transporte",
+      "icon": "🚗",
+      "color": "#38b2ac",
+      "createdAt": "2025-07-29T00:00:00.000Z"
+    },
+    {
+      "id": "5",
+      "userId": "4",
+      "name": "trabajo",
+      "icon": "💻",
+      "color": "#4fd1c7",
+      "createdAt": "2025-07-29T00:00:00.000Z"
+    },
+    {
+      "id": "6",
+      "userId": "4",
+      "name": "entretenimiento",
+      "icon": "🍕",
+      "color": "#f56565",
+      "createdAt": "2025-07-29T00:00:00.000Z"
+    }
+  ]
+}
